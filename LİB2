@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import messagebox
+from library import Library
+
+def list_books():
+    books_list.delete(0, tk.END)
+    books = lib.list_books()
+    for book in books:
+        books_list.insert(tk.END, book)
+
+def add_book():
+    title = title_entry.get()
+    author = author_entry.get()
+    release_year = release_year_entry.get()
+    num_pages = num_pages_entry.get()
+
+    if title and author and release_year and num_pages:
+        lib.add_book(title, author, release_year, num_pages)
+        messagebox.showinfo("Success", "Book added successfully!")
+        clear_entries()
+        list_books()
+    else:
+        messagebox.showerror("Error", "Please fill in all fields.")
+
+def remove_book():
+    title = title_entry.get()
+    if title:
+        lib.remove_book(title)
+        messagebox.showinfo("Success", "Book removed successfully!")
+        clear_entries()
+        list_books()
+    else:
+        messagebox.showerror("Error", "Please enter a book title.")
+
+def clear_entries():
+    title_entry.delete(0, tk.END)
+    author_entry.delete(0, tk.END)
+    release_year_entry.delete(0, tk.END)
+    num_pages_entry.delete(0, tk.END)
+
+# Tkinter setup
+root = tk.Tk()
+root.title("Library Management System")
+
+# Creating Library object
+lib = Library()
+
+# Labels
+tk.Label(root, text="Title:").grid(row=0, column=0, padx=5, pady=5)
+tk.Label(root, text="Author:").grid(row=1, column=0, padx=5, pady=5)
+tk.Label(root, text="Release Year:").grid(row=2, column=0, padx=5, pady=5)
+tk.Label(root, text="Number of Pages:").grid(row=3, column=0, padx=5, pady=5)
+
+# Entry fields
+title_entry = tk.Entry(root)
+title_entry.grid(row=0, column=1, padx=5, pady=5)
+author_entry = tk.Entry(root)
+author_entry.grid(row=1, column=1, padx=5, pady=5)
+release_year_entry = tk.Entry(root)
+release_year_entry.grid(row=2, column=1, padx=5, pady=5)
+num_pages_entry = tk.Entry(root)
+num_pages_entry.grid(row=3, column=1, padx=5, pady=5)
+
+# Buttons
+tk.Button(root, text="List Books", command=list_books).grid(row=4, column=0, columnspan=2, pady=5)
+tk.Button(root, text="Add Book", command=add_book).grid(row=5, column=0, columnspan=2, pady=5)
+tk.Button(root, text="Remove Book", command=remove_book).grid(row=6, column=0, columnspan=2, pady=5)
+
+# Books Listbox
+books_list = tk.Listbox(root, width=50)
+books_list.grid(row=7, column=0, columnspan=2, padx=5, pady=5)
+
+# Run the Tkinter event loop
+root.mainloop()
